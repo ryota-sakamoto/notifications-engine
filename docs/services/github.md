@@ -69,4 +69,12 @@ template.app-deployed: |
       state: success
       label: "continuous-delivery/{{.app.metadata.name}}"
       targetURL: "{{.context.argocdUrl}}/applications/{{.app.metadata.name}}?operation=true"
+    custom:
+      issue:
+        method: POST
+        path: /repos/<owner>/<repo>/issues
+        body: |
+          {
+            "title": "check your application"
+          }
 ```

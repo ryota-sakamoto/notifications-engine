@@ -33,13 +33,20 @@ type GitHubOptions struct {
 type GitHubNotification struct {
 	repoURL  string
 	revision string
-	Status   *GitHubStatus `json:"status,omitempty"`
+	Status   *GitHubStatus            `json:"status,omitempty"`
+	Custom   map[string]*GitHubCustom `json:"custom,omitempty"`
 }
 
 type GitHubStatus struct {
 	State     string `json:"state,omitempty"`
 	Label     string `json:"label,omitempty"`
 	TargetURL string `json:"targetURL,omitempty"`
+}
+
+type GitHubCustom struct {
+	Method string `json:"method,omitempty"`
+	Path   string `json:"path,omitempty"`
+	Body   string `json:"body,omitempty"`
 }
 
 const (
@@ -74,6 +81,10 @@ func (g *GitHubNotification) GetTemplater(name string, f texttemplate.FuncMap) (
 		if err != nil {
 			return nil, err
 		}
+	}
+
+	if g.Custom != nil {
+
 	}
 
 	return func(notification *Notification, vars map[string]interface{}) error {
@@ -115,6 +126,10 @@ func (g *GitHubNotification) GetTemplater(name string, f texttemplate.FuncMap) (
 				return err
 			}
 			notification.GitHub.Status.TargetURL = targetData.String()
+		}
+
+		if g.Custom != nil {
+
 		}
 
 		return nil
